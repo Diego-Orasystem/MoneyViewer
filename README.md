@@ -10,12 +10,19 @@ Una aplicación web súper atractiva que simula un contador en tiempo real de tu
   - 🏥 Medlog: $1,300,000/mes
   - 🎯 **Total: $3,075,400/mes**
 
+- **💎 FUNCIONA INCLUSO CERRADA**: ¡El dinero sigue creciendo aunque cierres la app!
+  - Progreso guardado automáticamente cada 5 segundos
+  - Al abrir la app, calcula las ganancias acumuladas mientras estaba cerrada
+  - Notificación especial mostrando cuánto ganaste offline
+  - Efectos visuales especiales para ganancias offline
+
 - **Efectos visuales espectaculares**:
   - Colores tipo casino con efectos de neón
   - Animaciones de dinero flotante
   - Efectos de partículas
   - Barras de progreso animadas
   - Efectos especiales "Jackpot" cada $10,000
+  - Lluvia de dinero especial para ganancias offline
 
 - **Controles interactivos**:
   - 🚀 Botón INICIAR
@@ -27,6 +34,17 @@ Una aplicación web súper atractiva que simula un contador en tiempo real de tu
 1. **Abrir la aplicación**: Simplemente abre el archivo `index.html` en tu navegador
 2. **Iniciar el contador**: Haz clic en el botón "🚀 INICIAR"
 3. **Disfrutar**: ¡Mira cómo suben tus ganancias en tiempo real!
+4. **Cerrar y volver**: ¡Cierra la app cuando quieras! Al volver, verás cuánto ganaste mientras estaba cerrada
+
+## 💰 Funcionalidad Offline
+
+- **Auto-guardado**: La app guarda tu progreso cada 5 segundos automáticamente
+- **Ganancias continuas**: Aunque cierres el navegador, el dinero sigue acumulándose
+- **Notificación de bienvenida**: Al volver, recibes una notificación dorada mostrando:
+  - ⏰ Tiempo que estuvo cerrada la app
+  - 💰 Total ganado offline
+  - 📊 Desglose por cada fuente de ingresos
+- **Efectos especiales**: Lluvia de dinero dorada cuando vuelves después de estar offline
 
 ## 🎮 Easter Eggs
 

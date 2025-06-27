@@ -14,16 +14,17 @@ class MoneyCounter {
             medlog: this.monthlyEarnings.medlog / (30 * 24 * 60 * 60)
         };
         
-        // Estado del contador
-        this.currentEarnings = {
+        // Estado del contador - se carga desde localStorage
+        this.currentEarnings = this.loadProgress() || {
             consultora: 0,
             fits: 0,
             medlog: 0,
             total: 0
         };
         
-        this.isRunning = false;
-        this.startTime = null;
+        this.isRunning = this.loadRunningState();
+        this.startTime = this.loadStartTime();
+        this.lastSaveTime = this.loadLastSaveTime();
         this.intervalId = null;
         this.animationId = null;
         
@@ -45,6 +46,20 @@ class MoneyCounter {
         this.updateTime();
         this.createFloatingMoney();
         this.createParticles();
+        
+        // Calcular el progreso acumulado mientras la app estaba cerrada
+        this.calculateOfflineProgress();
+        
+        // Auto-guardar cada 5 segundos
+        this.autoSaveInterval = setInterval(() => this.saveProgress(), 5000);
+        
+        // Guardar antes de cerrar la ventana
+        window.addEventListener('beforeunload', () => this.saveProgress());
+        
+        // Si estaba corriendo, continuar automáticamente
+        if (this.isRunning) {
+            this.start();
+        }
     }
     
     initializeEventListeners() {
@@ -63,10 +78,14 @@ class MoneyCounter {
                 this.startTime = new Date();
                 this.updateSessionStart();
             }
+            this.lastSaveTime = new Date();
             
             this.intervalId = setInterval(() => this.updateCounters(), 50); // Actualizar cada 50ms para suavidad
             this.elements.startBtn.style.opacity = '0.5';
             this.elements.pauseBtn.style.opacity = '1';
+            
+            // Guardar estado
+            this.saveProgress();
             
             // Efectos visuales
             this.createMoneyRain();
@@ -80,6 +99,9 @@ class MoneyCounter {
             clearInterval(this.intervalId);
             this.elements.startBtn.style.opacity = '1';
             this.elements.pauseBtn.style.opacity = '0.5';
+            
+            // Guardar estado al pausar
+            this.saveProgress();
         }
     }
     
@@ -95,6 +117,7 @@ class MoneyCounter {
         };
         
         this.startTime = null;
+        this.lastSaveTime = null;
         this.updateDisplay();
         this.elements.sessionStart.textContent = '--:--';
         this.elements.startBtn.style.opacity = '1';
@@ -102,6 +125,9 @@ class MoneyCounter {
         
         // Resetear barras de progreso
         this.updateProgressBars();
+        
+        // Limpiar localStorage
+        this.clearProgress();
     }
     
     updateCounters() {
@@ -311,6 +337,174 @@ class MoneyCounter {
             };
             
             requestAnimationFrame(animate);
+        }
+    }
+    
+    // Métodos para persistencia de datos
+    saveProgress() {
+        const data = {
+            currentEarnings: this.currentEarnings,
+            isRunning: this.isRunning,
+            startTime: this.startTime ? this.startTime.getTime() : null,
+            lastSaveTime: new Date().getTime()
+        };
+        localStorage.setItem('moneyViewerProgress', JSON.stringify(data));
+    }
+    
+    loadProgress() {
+        const saved = localStorage.getItem('moneyViewerProgress');
+        if (saved) {
+            const data = JSON.parse(saved);
+            return data.currentEarnings;
+        }
+        return null;
+    }
+    
+    loadRunningState() {
+        const saved = localStorage.getItem('moneyViewerProgress');
+        if (saved) {
+            const data = JSON.parse(saved);
+            return data.isRunning || false;
+        }
+        return false;
+    }
+    
+    loadStartTime() {
+        const saved = localStorage.getItem('moneyViewerProgress');
+        if (saved) {
+            const data = JSON.parse(saved);
+            return data.startTime ? new Date(data.startTime) : null;
+        }
+        return null;
+    }
+    
+    loadLastSaveTime() {
+        const saved = localStorage.getItem('moneyViewerProgress');
+        if (saved) {
+            const data = JSON.parse(saved);
+            return data.lastSaveTime ? new Date(data.lastSaveTime) : null;
+        }
+        return null;
+    }
+    
+    clearProgress() {
+        localStorage.removeItem('moneyViewerProgress');
+    }
+    
+    calculateOfflineProgress() {
+        if (!this.isRunning || !this.lastSaveTime) return;
+        
+        const now = new Date();
+        const offlineSeconds = (now.getTime() - this.lastSaveTime.getTime()) / 1000;
+        
+        if (offlineSeconds > 0) {
+            // Calcular ganancias acumuladas mientras estaba cerrada la app
+            const offlineEarnings = {
+                consultora: this.secondlyEarnings.consultora * offlineSeconds,
+                fits: this.secondlyEarnings.fits * offlineSeconds,
+                medlog: this.secondlyEarnings.medlog * offlineSeconds
+            };
+            
+            this.currentEarnings.consultora += offlineEarnings.consultora;
+            this.currentEarnings.fits += offlineEarnings.fits;
+            this.currentEarnings.medlog += offlineEarnings.medlog;
+            this.currentEarnings.total = this.currentEarnings.consultora + this.currentEarnings.fits + this.currentEarnings.medlog;
+            
+            // Mostrar notificación de ganancias offline
+            this.showOfflineEarnings(offlineEarnings, offlineSeconds);
+            
+            this.updateDisplay();
+            this.updateProgressBars();
+        }
+    }
+    
+    showOfflineEarnings(offlineEarnings, seconds) {
+        const totalOffline = offlineEarnings.consultora + offlineEarnings.fits + offlineEarnings.medlog;
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        
+        // Crear notificación
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            color: #000;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            z-index: 10000;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border: 2px solid #FFD700;
+            animation: slideIn 0.5s ease-out;
+            max-width: 300px;
+        `;
+        
+        let timeText = '';
+        if (hours > 0) timeText += `${hours}h `;
+        if (minutes > 0) timeText += `${minutes}m`;
+        if (!timeText) timeText = '< 1m';
+        
+        notification.innerHTML = `
+            <div style="text-align: center; margin-bottom: 10px; font-size: 1.2rem;">
+                🎰 ¡GANANCIAS OFFLINE! 🎰
+            </div>
+            <div style="margin-bottom: 5px;">
+                ⏰ Tiempo offline: ${timeText}
+            </div>
+            <div style="font-size: 1.5rem; text-align: center; margin: 10px 0;">
+                ${this.formatMoney(totalOffline)}
+            </div>
+            <div style="font-size: 0.9rem; opacity: 0.8;">
+                💰 ${this.formatMoney(offlineEarnings.consultora)}<br>
+                💪 ${this.formatMoney(offlineEarnings.fits)}<br>
+                🏥 ${this.formatMoney(offlineEarnings.medlog)}
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remover después de 8 segundos
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOut 0.5s ease-in';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }
+        }, 8000);
+        
+        // Efecto especial para ganancias offline
+        this.createOfflineEffect();
+    }
+    
+    createOfflineEffect() {
+        // Efecto de lluvia de dinero especial
+        const symbols = ['💰', '💵', '💸', '🤑', '💎', '🏆'];
+        
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => {
+                const symbol = document.createElement('div');
+                symbol.className = 'money-symbol';
+                symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                symbol.style.left = Math.random() * 100 + '%';
+                symbol.style.animationDuration = '3s';
+                symbol.style.fontSize = '2.5rem';
+                symbol.style.color = '#FFD700';
+                symbol.style.textShadow = '0 0 20px #FFD700';
+                
+                this.elements.floatingMoney.appendChild(symbol);
+                
+                setTimeout(() => {
+                    if (symbol.parentNode) {
+                        symbol.parentNode.removeChild(symbol);
+                    }
+                }, 3000);
+            }, i * 100);
         }
     }
 }
