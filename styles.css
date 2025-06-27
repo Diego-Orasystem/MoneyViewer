@@ -1,0 +1,390 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', monospace;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 25%, #0a1a0a 50%, #1a1a0a 75%, #0a0a1a 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+.main-title {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #FFD700, #FF6B35, #F7931E, #FFD700);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite, pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+    to { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.4); }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stat-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.consultora {
+    border-color: #00FF41;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+.fits {
+    border-color: #FF073A;
+    box-shadow: 0 0 30px rgba(255, 7, 58, 0.3);
+}
+
+.medlog {
+    border-color: #007BFF;
+    box-shadow: 0 0 30px rgba(0, 123, 255, 0.3);
+}
+
+.total {
+    border-color: #FFD700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 53, 0.1));
+}
+
+.card-header {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.consultora h2 { color: #00FF41; text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+.fits h2 { color: #FF073A; text-shadow: 0 0 10px rgba(255, 7, 58, 0.5); }
+.medlog h2 { color: #007BFF; text-shadow: 0 0 10px rgba(0, 123, 255, 0.5); }
+.total h2 { color: #FFD700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.7); }
+
+.glow-effect {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: rotate 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.counter {
+    font-size: 3rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 0 0 20px currentColor;
+    transition: all 0.3s ease;
+}
+
+.consultora .counter { color: #00FF41; }
+.fits .counter { color: #FF073A; }
+.medlog .counter { color: #007BFF; }
+
+.total-counter {
+    font-size: 4rem !important;
+    background: linear-gradient(45deg, #FFD700, #FF6B35, #F7931E, #FFD700);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 2s ease infinite, counterPulse 1s ease-in-out infinite;
+}
+
+@keyframes counterPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.rate {
+    text-align: center;
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    animation: progressGlow 2s ease-in-out infinite;
+}
+
+.consultora-progress { background: linear-gradient(90deg, #00FF41, #00CC33); }
+.fits-progress { background: linear-gradient(90deg, #FF073A, #CC0529); }
+.medlog-progress { background: linear-gradient(90deg, #007BFF, #0056CC); }
+
+@keyframes progressGlow {
+    0%, 100% { box-shadow: 0 0 5px currentColor; }
+    50% { box-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
+}
+
+.jackpot-effect {
+    text-align: center;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.jackpot-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #FFD700, #FF6B35, #F7931E, #FFD700);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 1s ease infinite, jackpotBounce 2s ease-in-out infinite;
+}
+
+@keyframes jackpotBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+.control-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.control-btn:hover::before {
+    left: 100%;
+}
+
+.start {
+    background: linear-gradient(45deg, #00FF41, #00CC33);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+.pause {
+    background: linear-gradient(45deg, #FFD700, #F7931E);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.reset {
+    background: linear-gradient(45deg, #FF073A, #CC0529);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 7, 58, 0.4);
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.time-info {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.time-display {
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.session-info {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.floating-money {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.money-symbol {
+    position: absolute;
+    font-size: 2rem;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    animation: float 6s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Efectos de partículas */
+.particle {
+    position: absolute;
+    background: #FFD700;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle 3s ease-out infinite;
+}
+
+@keyframes particle {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .counter {
+        font-size: 2rem;
+    }
+    
+    .total-counter {
+        font-size: 2.5rem !important;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .control-btn {
+        width: 200px;
+    }
+} 

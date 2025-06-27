@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 MoneyViewer - Contador de Ganancias</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="main-title">💰 MONEY VIEWER 💰</h1>
+            <p class="subtitle">Contador de Ganancias en Tiempo Real</p>
+        </header>
+
+        <div class="stats-grid">
+            <!-- Consultora -->
+            <div class="stat-card consultora">
+                <div class="card-header">
+                    <h2>🏢 CONSULTORA</h2>
+                    <div class="glow-effect"></div>
+                </div>
+                <div class="counter" id="consultora-counter">$0</div>
+                <div class="rate">$1,182,000 / mes</div>
+                <div class="progress-bar">
+                    <div class="progress-fill consultora-progress"></div>
+                </div>
+            </div>
+
+            <!-- Fits -->
+            <div class="stat-card fits">
+                <div class="card-header">
+                    <h2>💪 FITS</h2>
+                    <div class="glow-effect"></div>
+                </div>
+                <div class="counter" id="fits-counter">$0</div>
+                <div class="rate">$593,400 / mes</div>
+                <div class="progress-bar">
+                    <div class="progress-fill fits-progress"></div>
+                </div>
+            </div>
+
+            <!-- Medlog -->
+            <div class="stat-card medlog">
+                <div class="card-header">
+                    <h2>🏥 MEDLOG</h2>
+                    <div class="glow-effect"></div>
+                </div>
+                <div class="counter" id="medlog-counter">$0</div>
+                <div class="rate">$1,300,000 / mes</div>
+                <div class="progress-bar">
+                    <div class="progress-fill medlog-progress"></div>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="stat-card total">
+                <div class="card-header">
+                    <h2>🎰 TOTAL GANANCIAS</h2>
+                    <div class="glow-effect"></div>
+                </div>
+                <div class="counter total-counter" id="total-counter">$0</div>
+                <div class="rate">$3,075,400 / mes</div>
+                <div class="jackpot-effect">
+                    <span class="jackpot-text">💎 JACKPOT 💎</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="start-btn" class="control-btn start">🚀 INICIAR</button>
+            <button id="pause-btn" class="control-btn pause">⏸️ PAUSAR</button>
+            <button id="reset-btn" class="control-btn reset">🔄 REINICIAR</button>
+        </div>
+
+        <div class="time-info">
+            <div class="time-display">
+                <span id="current-time"></span>
+            </div>
+            <div class="session-info">
+                Sesión iniciada: <span id="session-start">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-money">
+        <!-- Elementos flotantes de dinero se generarán dinámicamente -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
